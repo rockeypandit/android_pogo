@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "786108525543",
+    "firebase_url": "https://pogo-68a23.firebaseio.com",
+    "project_id": "pogo-68a23",
+    "storage_bucket": "pogo-68a23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786108525543:android:8be3139f4f0a43c0",
+        "android_client_info": {
+          "package_name": "com.example.rockeypandit.pogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786108525543-u7mtc03oj7c3dcl1of7q82878po3jhr4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rockeypandit.pogo",
+            "certificate_hash": "cb860f270e7ba69285a48836bbdeb54f74321e46"
+          }
+        },
+        {
+          "client_id": "786108525543-upf1gkaa7scl19llbh32mm77gejvhedj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwZLA0dcpR9RZBzeluFZeOfrB_NA4Ssdg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786108525543-upf1gkaa7scl19llbh32mm77gejvhedj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
