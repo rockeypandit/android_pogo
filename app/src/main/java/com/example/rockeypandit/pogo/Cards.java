@@ -2,9 +2,10 @@ package com.example.rockeypandit.pogo;
 
 public class Cards {
 
-    private String userId , name;
-    public Cards(String userId,String name){
+    private String userId , name, profileImageUrl;
+    public Cards(String userId,String name,String profileImageUrl){
         this.userId=userId;
+        this.profileImageUrl=profileImageUrl;
         this.name=name;
     }
 
@@ -22,6 +23,15 @@ public class Cards {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String name) {
+        this.profileImageUrl = profileImageUrl;
     }
 
 
