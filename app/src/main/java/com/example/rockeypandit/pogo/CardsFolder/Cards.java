@@ -1,4 +1,4 @@
-package com.example.rockeypandit.pogo;
+package com.example.rockeypandit.pogo.CardsFolder;
 
 public class Cards {
 
@@ -31,6 +31,7 @@ public class Cards {
     }
 
     public void setProfileImageUrl(String name) {
+
         this.profileImageUrl = profileImageUrl;
     }
 

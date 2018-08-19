@@ -1,17 +1,17 @@
 package com.example.rockeypandit.pogo;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
+import com.example.rockeypandit.pogo.CardsFolder.ArrayAdapters;
+import com.example.rockeypandit.pogo.CardsFolder.Cards;
+import com.example.rockeypandit.pogo.Matches.MatchesActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -121,8 +121,15 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Toast.makeText(MainActivity.this,"new Connection",Toast.LENGTH_LONG).show();
-                    usersDb.child(dataSnapshot.getKey()).child("connections").child("matches").child(currentUId).setValue(true);
-                    usersDb.child(currentUId).child("connections").child("matches").child(dataSnapshot.getKey()).setValue(true);
+
+                    String key = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
+
+                    usersDb.child(dataSnapshot.getKey()).child("connections").child("matches").child(currentUId).child("ChatId").setValue(key);
+                    usersDb.child(currentUId).child("connections").child("matches").child(dataSnapshot.getKey()).child("ChatId").setValue(key);
+
+
+                    // usersDb.child(dataSnapshot.getKey()).child("connections").child("matches").child(currentUId).setValue(true);
+                    //  usersDb.child(currentUId).child("connections").child("matches").child(dataSnapshot.getKey()).setValue(true);
                 }
             }
 
@@ -152,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     if(dataSnapshot.child("sex").getValue() != null){
                         userSex = dataSnapshot.child("sex").getValue().toString();
                         switch (userSex){
-                            case " Male":
+                            case "Male":
                                 oppositeUserSex = "Female";break;
                             case "Female":
                                 oppositeUserSex = "Male";
@@ -202,14 +209,16 @@ public class MainActivity extends AppCompatActivity {
         usersDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.exists() && !dataSnapshot.child("connections").child("nope").hasChild(currentUId) && !dataSnapshot.child("connections").child("yeps").hasChild(currentUId) && dataSnapshot.child("sex").getValue().toString().equals(oppositeUserSex)){
-                    String profileImageUrl="default image";
-                    if(dataSnapshot.child("profileImageUrl").getValue().equals("defaultimage")){
-                        profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
+                if (dataSnapshot.child("sex").getValue() != null) {
+                    if (dataSnapshot.exists() && !dataSnapshot.child("connections").child("nope").hasChild(currentUId) && !dataSnapshot.child("connections").child("yeps").hasChild(currentUId) && dataSnapshot.child("sex").getValue().toString().equals(oppositeUserSex)) {
+                        String profileImageUrl = "default image";
+                        if (dataSnapshot.child("profileImageUrl").getValue().equals("defaultimage")) {
+                            profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
+                        }
+                        Cards item = new Cards(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString(), profileImageUrl);
+                        rowItems.add(item);
+                        arrayAdapter.notifyDataSetChanged();
                     }
-                    Cards item = new Cards(dataSnapshot.getKey(),dataSnapshot.child("name").getValue().toString(),profileImageUrl);
-                    rowItems.add(item);
-                    arrayAdapter.notifyDataSetChanged();
                 }
             }
             @Override
@@ -259,6 +268,13 @@ public class MainActivity extends AppCompatActivity {
     public void goToSettings(View view) {
         checkCurrentSex();
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        //System.out.print(userSex);
+        startActivity(intent);
+
+    }
+    public void goToMatches(View view) {
+        checkCurrentSex();
+        Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
         //System.out.print(userSex);
         startActivity(intent);
 

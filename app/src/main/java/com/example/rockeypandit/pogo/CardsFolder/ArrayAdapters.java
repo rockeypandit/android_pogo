@@ -1,4 +1,4 @@
-package com.example.rockeypandit.pogo;
+package com.example.rockeypandit.pogo.CardsFolder;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.rockeypandit.pogo.R;
 
 import java.util.List;
 
