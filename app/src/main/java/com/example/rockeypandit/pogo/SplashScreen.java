@@ -32,7 +32,7 @@ public class SplashScreen extends AppCompatActivity {
         imgLogo.startAnimation(slideup);
 
         final Intent gotoLogin = new Intent(this,LoginActivity.class);
-        final Intent gotoChooseRegisterationActivity = new Intent(this,ChooseLoginRegistrationActivity.class);
+        final Intent gotoChooseRegisterationActivity = new Intent(this,LoginActivity.class);
 
         Thread timer = new Thread() {
             public void run() {

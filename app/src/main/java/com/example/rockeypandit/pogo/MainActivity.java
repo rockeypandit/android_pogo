@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-
-
         usersDb = FirebaseDatabase.getInstance().getReference().child("User");
 
         mAuth = FirebaseAuth.getInstance();
@@ -177,30 +174,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        DatabaseReference femaleDb = FirebaseDatabase.getInstance().getReference().child("User").child("Female");
-//        femaleDb.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                if (dataSnapshot.getKey().equals(user.getUid())){
-//                    userSex = "Female";
-//                    oppositeUserSex = "Male";
-//                    getOppositeSexUsers();
-//                }
-//            }
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            }
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
+
     }
 
     public void getOppositeSexUsers(){

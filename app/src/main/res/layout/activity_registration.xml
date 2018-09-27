@@ -31,15 +31,23 @@
 
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:hint="Email"
+        android:padding="20dp"
         android:id="@+id/email"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:id="@+id/password"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:id="@+id/locationText"/>
 
     <Button
         android:layout_width="match_parent"

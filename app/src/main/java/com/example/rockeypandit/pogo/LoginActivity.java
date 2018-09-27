@@ -17,6 +17,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
+
+    public void gotoRegistration(View v){
+    Intent intent = new Intent(this,RegistrationActivity.class);
+    startActivity(intent);
+
+    }
+
     private Button mLogin;
     private EditText mEmail, mPassword;
 
@@ -43,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
         mLogin = (Button) findViewById(R.id.login);
-
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
 

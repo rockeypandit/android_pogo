@@ -1,17 +1,20 @@
 package com.example.rockeypandit.pogo;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.akhgupta.easylocation.EasyLocationAppCompatActivity;
 import com.akhgupta.easylocation.EasyLocationRequest;
 import com.akhgupta.easylocation.EasyLocationRequestBuilder;
@@ -23,8 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class RegistrationActivity extends EasyLocationAppCompatActivity {
@@ -32,6 +36,12 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
     private Button mRegister;
     private EditText mEmail, mPassword, mName;
     private RadioGroup mRadioGroup;
+    private TextView locationTextBox;
+
+
+
+
+
 
 
     private FirebaseAuth mAuth;
@@ -42,7 +52,13 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        Animation expandIn = AnimationUtils.loadAnimation(this, R.anim.popin);
+
         mAuth = FirebaseAuth.getInstance();
+
+
+
+
 
         firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -65,12 +81,17 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
         mName = (EditText) findViewById(R.id.name);
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mName = (EditText) findViewById(R.id.name);
+        locationTextBox = (TextView) findViewById(R.id.locationText);
 
+
+        mEmail.startAnimation(expandIn);
+        mRegister.startAnimation(expandIn);
 
 
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 int selectId = mRadioGroup.getCheckedRadioButtonId();
                 final RadioButton radioButton = (RadioButton) findViewById(selectId);
@@ -106,7 +127,15 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
         });
 
 
+
         locationRequest();
+
+
+
+
+
+
+
     }
 
     public void locationRequest(){
@@ -126,13 +155,13 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        mAuth.addAuthStateListener(firebaseAuthStateListener);
+        mAuth.addAuthStateListener(firebaseAuthStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        mAuth.removeAuthStateListener(firebaseAuthStateListener);
+        mAuth.removeAuthStateListener(firebaseAuthStateListener);
     }
 
     @Override
@@ -143,13 +172,45 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
     @Override
     public void onLocationPermissionDenied() {
 
+
     }
 
     @Override
     public void onLocationReceived(Location location) {
+
+
+
+        try{
+            Geocoder geo = new Geocoder(this.getApplicationContext(), Locale.getDefault());
+            List<Address> addresses = geo.getFromLocation(location.getLatitude(),location.getLongitude(), 1);
+            if (addresses.isEmpty()) {
+                locationTextBox.setText("Waiting for Location");
+            }
+            else {
+                if (addresses.size() > 0) {
+                    locationTextBox.setText(addresses.get(0).getFeatureName() + "," + addresses.get(0).getLocality() +"," + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName() + "DISTANCE =" + (calculateDistance(location.getLatitude(),location.getLongitude()))/1000+"");
+
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+
+
+
         //idhar se coordintes le le...........
         System.out.println("coordinates:"+"lat="+location.getLatitude()+" lon="+location.getLongitude()+" accuracy="+location.getAccuracy());
     }
+
 
     @Override
     public void onLocationProviderEnabled() {
@@ -160,5 +221,31 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
     public void onLocationProviderDisabled() {
 
     }
+
+    public double calculateDistance(Double lat1,Double lon1) {
+        Double lat2 = 21.2513844;
+        Double lon2 = 81.6296413;
+
+
+        Location startPoint = new Location("locationA");
+        startPoint.setLatitude(lat1);
+        startPoint.setLongitude(lon1);
+
+        Location endPoint = new Location("locationA");
+        endPoint.setLatitude(lat2);
+        endPoint.setLongitude(lon2);
+
+        double distance = startPoint.distanceTo(endPoint);
+
+        return distance;
+    }
+
+
+
+
+
+
+
+
 }
 
