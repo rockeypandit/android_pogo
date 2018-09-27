@@ -43,6 +43,20 @@
         android:hint="Password"
         android:id="@+id/password"/>
 
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Same sex"
+        android:id="@+id/checkSameSex"/>
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Opp sex"
+        android:id="@+id/checkOppSex"/>
+
+
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

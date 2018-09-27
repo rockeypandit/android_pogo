@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.example.rockeypandit.pogo.CardsFolder.ArrayAdapters;
 import com.example.rockeypandit.pogo.CardsFolder.Cards;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private String currentUId;
-
+    private ImageView imgNoMore;
     private DatabaseReference usersDb;
 
     ListView listView;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         currentUId = mAuth.getCurrentUser().getUid();
 
         checkUserSex();
-
+        imgNoMore = (ImageView)findViewById(R.id.imgNoMore);
 
 
         rowItems = new ArrayList<Cards>();
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
+//                if (itemsInAdapter == 0)
+//                    imgNoMore.setImageResource(R.drawable.pawlogo);
+
             }
 
             @Override
@@ -154,7 +159,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if(dataSnapshot.exists()){
                     if(dataSnapshot.child("sex").getValue() != null){
+
                         userSex = dataSnapshot.child("sex").getValue().toString();
+
                         switch (userSex){
                             case "Male":
                                 oppositeUserSex = "Female";break;

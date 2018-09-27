@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -37,11 +38,12 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
     private EditText mEmail, mPassword, mName;
     private RadioGroup mRadioGroup;
     private TextView locationTextBox;
+    private CheckBox mCheckSameSex,mCheckOppSex;
+
+    private Double myLatitude,myLongitude;
 
 
-
-
-
+    Boolean interestedInSame=false,interestedInOpp=false;
 
 
     private FirebaseAuth mAuth;
@@ -82,6 +84,8 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mName = (EditText) findViewById(R.id.name);
         locationTextBox = (TextView) findViewById(R.id.locationText);
+        mCheckSameSex = (CheckBox) findViewById(R.id.checkSameSex);
+        mCheckOppSex = (CheckBox) findViewById(R.id.checkOppSex);
 
 
         mEmail.startAnimation(expandIn);
@@ -104,8 +108,10 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
                 final String name = mName.getText().toString();
+                locationRequest();
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
+
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
                             Toast.makeText(RegistrationActivity.this, "sign up error", Toast.LENGTH_SHORT).show();
@@ -117,6 +123,18 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
                             userInfo.put("name",name);
                             userInfo.put("sex",radioButton.getText().toString());
                             userInfo.put("profileImageUrl","defaultimage");
+
+                            if(mCheckSameSex.isChecked()){
+                                interestedInSame=true;
+                            }
+                            if(mCheckOppSex.isChecked()){
+                                interestedInOpp=true;
+                            }
+                            userInfo.put("interested in same",interestedInSame);
+                            userInfo.put("interested in opp",interestedInOpp);
+
+                            userInfo.put("lat",myLatitude);
+                            userInfo.put("long",myLongitude);
                             currentUserDb.updateChildren(userInfo);
 
 
@@ -128,7 +146,7 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
 
 
 
-        locationRequest();
+
 
 
 
@@ -197,19 +215,13 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
             e.printStackTrace();
         }
 
-
-
-
-
-
-
-
-
-
+        myLatitude = location.getLatitude();
+        myLongitude = location.getLongitude();
 
         //idhar se coordintes le le...........
         System.out.println("coordinates:"+"lat="+location.getLatitude()+" lon="+location.getLongitude()+" accuracy="+location.getAccuracy());
     }
+
 
 
     @Override
