@@ -40,7 +40,7 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
     private TextView locationTextBox;
     private CheckBox mCheckSameSex,mCheckOppSex;
 
-    private Double myLatitude,myLongitude;
+    private Double myLatitude = null,myLongitude = null;
 
 
     Boolean interestedInSame=false,interestedInOpp=false;
@@ -108,7 +108,9 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
                 final String name = mName.getText().toString();
+
                 locationRequest();
+
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
 
@@ -124,15 +126,21 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
                             userInfo.put("sex",radioButton.getText().toString());
                             userInfo.put("profileImageUrl","defaultimage");
 
-                            if(mCheckSameSex.isChecked()){
-                                interestedInSame=true;
+                            if (mCheckSameSex.isChecked()) {
+                                interestedInSame = true;
                             }
-                            if(mCheckOppSex.isChecked()){
-                                interestedInOpp=true;
+
+                            if (mCheckOppSex.isChecked()) {
+                                interestedInOpp = true;
+                            }
+
+
+                            if(myLatitude == null) {
+                                Toast.makeText(getApplicationContext(),"unknown location",Toast.LENGTH_LONG).show();
+
                             }
                             userInfo.put("interested in same",interestedInSame);
                             userInfo.put("interested in opp",interestedInOpp);
-
                             userInfo.put("lat",myLatitude);
                             userInfo.put("long",myLongitude);
                             currentUserDb.updateChildren(userInfo);
@@ -195,9 +203,6 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
 
     @Override
     public void onLocationReceived(Location location) {
-
-
-
         try{
             Geocoder geo = new Geocoder(this.getApplicationContext(), Locale.getDefault());
             List<Address> addresses = geo.getFromLocation(location.getLatitude(),location.getLongitude(), 1);
@@ -219,7 +224,7 @@ public class RegistrationActivity extends EasyLocationAppCompatActivity {
         myLongitude = location.getLongitude();
 
         //idhar se coordintes le le...........
-        System.out.println("coordinates:"+"lat="+location.getLatitude()+" lon="+location.getLongitude()+" accuracy="+location.getAccuracy());
+     //   System.out.println("coordinates:"+"lat="+location.getLatitude()+" lon="+location.getLongitude()+" accuracy="+location.getAccuracy());
     }
 
 

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentUId;
     private ImageView imgNoMore;
     private DatabaseReference usersDb;
+    private Boolean interestedInSame = null , interestedInOpp = null;
 
     ListView listView;
     List<Cards> rowItems;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Log.d("LIST", "removed object!");
+              //  Log.d("LIST", "removed object!");
                 rowItems.remove(0);
                 arrayAdapter.notifyDataSetChanged();
             }
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     public void checkUserSex(){
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DatabaseReference userDb =usersDb.child(user.getUid());
+        final DatabaseReference userDb =usersDb.child(user.getUid());
         userDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -162,27 +163,78 @@ public class MainActivity extends AppCompatActivity {
 
                         userSex = dataSnapshot.child("sex").getValue().toString();
 
-                        switch (userSex){
-                            case "Male":
-                                oppositeUserSex = "Female";break;
-                            case "Female":
-                                oppositeUserSex = "Male";
-                                break;
+
+
+                        if((dataSnapshot.child("interested in same").getValue().toString()).equalsIgnoreCase("true")){
+                            interestedInSame =true;
+                        }
+                        if((dataSnapshot.child("interested in opp").getValue().toString()).equalsIgnoreCase("true")){
+                            interestedInOpp =true;
+                        }
+
+
+                        if (interestedInSame && interestedInOpp ){
+                            switch (userSex){
+                                case "Male":
+                                    oppositeUserSex = "Female";break;
+                                case "Female":
+                                    oppositeUserSex = "Male";
+                                    break;
                             }
                             getOppositeSexUsers();
+
+                            switch (userSex){
+                                case "Male":
+                                    oppositeUserSex = "Male";break;
+                                case "Female":
+                                    oppositeUserSex = "Female";
+                                    break;
+                            }
+                            getOppositeSexUsers();
+
                         }
+                        else if (interestedInSame){
+                            switch (userSex){
+                                case "Male":
+                                    oppositeUserSex = "Male";break;
+                                case "Female":
+                                    oppositeUserSex = "Female";
+                                    break;
+                            }
+                            getOppositeSexUsers();
+
+                        }
+                        else if (interestedInOpp){
+                            switch (userSex) {
+                                case "Male":
+                                    oppositeUserSex = "Female";
+                                    break;
+                                case "Female":
+                                    oppositeUserSex = "Male";
+                                    break;
+                            }
+                            getOppositeSexUsers();
+
+                        }
+
                     }
+
+
+
+                }
+
 
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
 
     }
+
+    List ids = new ArrayList();
 
     public void getOppositeSexUsers(){
 
@@ -192,13 +244,27 @@ public class MainActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.child("sex").getValue() != null) {
                     if (dataSnapshot.exists() && !dataSnapshot.child("connections").child("nope").hasChild(currentUId) && !dataSnapshot.child("connections").child("yeps").hasChild(currentUId) && dataSnapshot.child("sex").getValue().toString().equals(oppositeUserSex)) {
-                        String profileImageUrl = "default image";
-                        if (dataSnapshot.child("profileImageUrl").getValue().equals("defaultimage")) {
-                            profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
+
+
+                        if (!(ids.contains(dataSnapshot.getKey()) )) {
+                            if (!(dataSnapshot.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))) {
+                                ids.add(dataSnapshot.getKey());
+
+
+                                //        if(usersDb.getKey())
+                                Log.d("GET UID ", dataSnapshot.getKey());
+                                    Log.d("GET KEY ", FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
+                                String profileImageUrl = "default image";
+                                if (dataSnapshot.child("profileImageUrl").getValue().equals("defaultimage")) {
+                                    profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString();
+                                }
+                                Cards item = new Cards(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString(), profileImageUrl);
+                                rowItems.add(item);
+                                arrayAdapter.notifyDataSetChanged();
+                            }
                         }
-                        Cards item = new Cards(dataSnapshot.getKey(), dataSnapshot.child("name").getValue().toString(), profileImageUrl);
-                        rowItems.add(item);
-                        arrayAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -229,34 +295,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void checkCurrentSex(){
-        String sex=null;
-        if(currentUId!=null){
-            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-
-
-            sex= user.getUid();
-        }
-        userSex=sex;
-
-    }
+//    public void checkCurrentSex(){
+//        String sex=null;
+//        if(currentUId!=null){
+//            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//            sex= user.getUid();
+//            Log.d("USER . GET UID",sex);
+//        }
+//        userSex=sex;
+//
+//    }
 
 
 
 
 
     public void goToSettings(View view) {
-        checkCurrentSex();
+       // checkCurrentSex();
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         //System.out.print(userSex);
         startActivity(intent);
 
     }
     public void goToMatches(View view) {
-        checkCurrentSex();
+       // checkCurrentSex();
         Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
-        //System.out.print(userSex);
+       // System.out.print(userSex);
         startActivity(intent);
 
     }
