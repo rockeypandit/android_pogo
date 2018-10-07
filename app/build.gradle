@@ -37,6 +37,6 @@ dependencies {
     implementation 'com.akhgupta:android-easylocation:1.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
 
-
+    implementation 'com.github.ratty3697:android-smart-animation-library:1.6'
 }
 apply plugin: 'com.google.gms.google-services'
