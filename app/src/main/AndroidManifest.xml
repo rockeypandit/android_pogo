@@ -31,12 +31,14 @@
             android:label="@string/title_activity_matches"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Chat.ChatActivity" />
+
+        <activity android:name=".PopupTestActivity" />
+
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".PopupTestActivity">
-        </activity>
+
     </application>
 
 </manifest>

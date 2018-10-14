@@ -34,6 +34,11 @@ public class SplashScreen extends AppCompatActivity {
         final Intent gotoLogin = new Intent(this,LoginActivity.class);
         final Intent gotoChooseRegisterationActivity = new Intent(this,LoginActivity.class);
 
+
+
+
+
+
         Thread timer = new Thread() {
             public void run() {
                 try {
@@ -89,6 +94,9 @@ public class SplashScreen extends AppCompatActivity {
 
         };
         timer.start();
+
+
+
 
 
     }

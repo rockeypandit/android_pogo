@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        Intent i = new Intent(this,PopupTestActivity.class);
+        startActivity(i);
+
         usersDb = FirebaseDatabase.getInstance().getReference().child("User");
 
         mAuth = FirebaseAuth.getInstance();
